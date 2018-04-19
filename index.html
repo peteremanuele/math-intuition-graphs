@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html>
+<style>
+    #lessonDiv {
+        position: absolute;
+        z-index: 9;
+        background-color: #f1f1f1;
+        text-align: center;
+        border: 1px solid #d3d3d3;
+        margin-right: 50px;
+
+    }
+
+    #lessonDivHeader {
+        padding: 10px;
+        cursor: move;
+        z-index: 10;
+        background-color: #2196F3;
+        color: #fff;
+    }
+
+    .pointer {
+        cursor: pointer;
+    }
+
+    #ques {
+        color: darkblue;
+    }
+
+    .topic {
+        text-decoration: underline;
+    }
+
+    .col {
+        margin: 5px;
+    }
+
+    .boxed {
+        border: 2px solid grey;
+    }
+
+    .pad5 {
+        padding: 5px;
+    }
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.9.0/katex.min.css" integrity="sha384-TEMocfGvRuD1rIAacqrknm5BQZ7W7uWitoih+jMNFXQIbNl16bO8OZmylH/Vi/Ei"
+    crossorigin="anonymous">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.9.0/katex.min.js" integrity="sha384-jmxIlussZWB7qCuB+PgKG1uLjjxbVVIayPJwi6cG6Zb4YKq0JIw+OMnkkEC7kYCq"
+    crossorigin="anonymous"></script>
+<script type="text/javascript" charset="UTF-8" src="http://cdnjs.cloudflare.com/ajax/libs/jsxgraph/0.99.3/jsxgraphcore.js"></script>
+<link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
+
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+    crossorigin="anonymous"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/4.0.1/math.js"></script>
+<script src="problems.js"></script>
+
+<body>
+    <div id="content">
+        <div class="row">
+            <div class="col">
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton-orderPair" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                        Understanding Order Pairs on A X-Y Grid
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton-orderPair">
+                        <a class="dropdown-item" href="#" onclick="callStateInputsAndOutputs()">Find Input and Output</a>
+                        <a class="dropdown-item" href="#" onclick="callInputOutputExample()">Calculate Input and Output from Function</a>
+                        <a class="dropdown-item" href="#" onclick="callFindMatchingInputs ()">Find the Same Inputs</a>
+                        <a class="dropdown-item" href="#" onclick="callFindMatchingOutputs ()">Find the Same Outputs</a>
+                        <a class="dropdown-item" href="#" onclick="CallChangeOfPointY()">Find the Change of Y from Two Points</a>
+                        <a class="dropdown-item" href="#" onclick="CallChangeOfPointX()">Find Change in X from Two Points</a>
+                        <a class="dropdown-item" href="#" onclick="callTwoPointsSlope()">Slope</a>
+                        <a class="dropdown-item" href="#" onclick="callInvertPoint()">Invert a Point</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                        aria-expanded="false">
+                        Understanding Basic Graphs
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="#" onclick="callGraphSlopeInt()">Graph by Slope Intercept</a>
+                        <a class="dropdown-item" href="#" onclick="callTransformVertex()">Transform Vertex</a>
+                        <a class="dropdown-item" href="#" onclick="callTransformOnePoint()">Transform Any Point</a>
+                        <a class="dropdown-item" href="#" onclick="callGraphExp()">Graph Exponent</a>
+                        <a class="dropdown-item" href="#" onclick="callGraphLog()">Graph Log by Exponent Inverse</a>
+                        <a class="dropdown-item" href="#" onclick="callDrawAsymptote()">Draw Asymptote</a>
+                        <a class="dropdown-item" href="#" onclick="callGraphOneOverX()">Graph 1/x</a>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                        aria-expanded="false">
+                        Non-Graphs
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="#" onclick="simpleReduction()">Solve Simple Reduction</a>
+                        <a class="dropdown-item" href="#" onclick="eliminateAndReduce()">Elimination and Matrix Reduction</a>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <h1 id="problem-title" class="topic"></h1>
+    <p> -- </p>
+
+    <div class="row" id="top">
+        <div class="col" id="left-side">
+            <span id="ques"></span>
+            <!-- where the question usually is displayed -->
+            <p id="supplement"></p>
+            <!-- a place under the question to show extra information -->
+            <div id="box" class="jxgbox" style="width:500px; height:500px;"></div>
+            <!-- display the graph paper -->
+        </div>
+        <div class="col" id="right-side" style="display: none">
+            <div id="lessonDiv" style="display: none">
+                <div id="lessonDivHeader">Guidance</div>
+                <div class="pad5">
+                    <p>
+                        <span id="topText">...</span>
+                    </p>
+
+                    <p id="hint"></p>
+                    <p id="hintResult"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <script>
+
+    </script>
+    <script type="text/javascript">
+
+
+        // Init board
+        // var brd = JXG.JSXGraph.initBoard('box', { axis: true, boundingbox: [-5, 10, 5, -10], showCopyright:false });
+        function CallChangeOfPointY() {
+            var brd = changeOfPointY(JXG, katex, math);
+        }
+
+        function CallChangeOfPointX() {
+            var brd = changeOfPointX(JXG, katex, math);
+        }
+
+        function callInputOutputExample() {
+            var brd = inputOutputExample(JXG, katex, math);
+            console.log(brd);
+        }
+
+        function callStateInputsAndOutputs() {
+            var brd = stateInputsAndOutputs(JXG, katex, math);
+            console.log(brd);
+        }
+
+        function callFindMatchingInputs() {
+            findMatchingInputs();
+        }
+
+        function callFindMatchingOutputs() {
+            findMatchingOutputs();
+        }
+
+        function callTwoPointsSlope() {
+            var brd = twoPointsSlope(JXG, katex, math)
+        }
+
+        function callGraphSlopeInt() {
+            var brd = graphSlopeInt(JXG, katex, math)
+        }
+
+        function callTransformOnePoint() {
+            var brd = transformOnePoint(JXG, katex, math);
+        }
+
+        function callTransformVertex() {
+            var brd = transformVertex();
+        }
+
+        function callInvertPoint() {
+            var brd = invertPoint();
+        }
+
+        function callGraphExp() {
+            var brd = graphExp();
+        }
+
+        function callGraphLog() {
+            var brd = graphLog();
+        }
+
+        function callDrawAsymptote() {
+            var brd = drawAsymptote();
+        }
+
+        function callGraphOneOverX () {
+            var brd = graphOneOverX();
+        }
+
+        document.getElementById(("lessonDiv")).style.display = 'block';
+        // katex.render("f(a,b,c) = (a^2+b^2+c^2)^3", mykatex1);
+        dragElement(document.getElementById(("lessonDiv")));
+
+        function dragElement(elmnt) {
+            console.log('dragging....');
+            var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+            if (document.getElementById(elmnt.id + "header")) {
+                /* if present, the header is where you move the DIV from:*/
+                document.getElementById(elmnt.id + "header").onmousedown = dragMouseDown;
+            } else {
+                /* otherwise, move the DIV from anywhere inside the DIV:*/
+                elmnt.onmousedown = dragMouseDown;
+            }
+
+            function dragMouseDown(e) {
+                e = e || window.event;
+                // get the mouse cursor position at startup:
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                document.onmouseup = closeDragElement;
+                // call a function whenever the cursor moves:
+                document.onmousemove = elementDrag;
+            }
+
+            function elementDrag(e) {
+                e = e || window.event;
+                // calculate the new cursor position:
+                pos1 = pos3 - e.clientX;
+                pos2 = pos4 - e.clientY;
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                // set the element's new position:
+                elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+                elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+            }
+
+            function closeDragElement() {
+                /* stop moving when mouse button is released:*/
+                document.onmouseup = null;
+                document.onmousemove = null;
+            }
+        }
+    </script>
+
+
+
+</body>
+
+</html>
