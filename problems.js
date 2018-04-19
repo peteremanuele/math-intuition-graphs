@@ -1292,6 +1292,83 @@ function graphOneOverX () {
     graphOneOverX.draw = draw;
 
 }
+
+function multiplyMatrices () {
+    clearBoard();
+    document.getElementById(("right-side")).style.display = 'block';
+    document.getElementById("problem-title").innerHTML = 'Multiply Matrices'; 
+    var r=Math.floor((Math.random() * 3) +2 );
+	var rc=Math.floor((Math.random() * 3) +2 );
+	var c=Math.floor((Math.random() * 3) +2 )
+	var a= [];//initialize array
+	for (var i = 0 ; i < r; i++){
+		a[i] = [];//initialize inner array
+		for (var j = 0; j < rc; j++) 
+		{
+			a[i][j] = Math.floor((Math.random() * 10) +2 )*Math.pow(-1, Math.floor((Math.random() * 2)));
+		}
+	}
+	var b= [];//initialize array
+	for (var i = 0 ; i < rc; i++) {
+		b[i] = [];//initialize inner array
+		for (var j = 0; j < c; j++) 
+		{//i++ = j++
+			b[i][j] = Math.floor((Math.random() * 10) +2 )*Math.pow(-1, Math.floor((Math.random() * 2)));
+		}
+    }
+
+    document.getElementById("supplement").innerHTML = '<p>' + katex.renderToString('A = \\color{red}'+arrayToMatrix(a));
+    document.getElementById("supplement").innerHTML += '<p> and </p>';
+    document.getElementById("supplement").innerHTML += katex.renderToString('B = \\color{blue}'+arrayToMatrix(b)) + '</p>';
+    document.getElementById("supplement").innerHTML += '<p>Find  ' + katex.renderToString('M = A \\times B ') + '</p>';
+    document.getElementById("topText").innerHTML =  writeButton('multiplyMatrices.checkSize()', 'Check the size', 'b0');
+    var text = '';
+    function checkSize () {
+        text = '<p>If the <span style="color:red">column</span> of the first matrix matches the <span style="color:blue">row</span> of the second, you can multiply the matrices</p>';
+        text += '<p>' + katex.renderToString('(\\color{red} ' + r + '\\times \\cancel{' + rc +'} \\color{'+katexColor+'}) \\times (\\color{blue} \\cancel{' + rc +'} \\times' + c+'\\color{'+katexColor+'})') + ' </p> ';
+        text += '<p>The resulting matrix will have a size ' + katex.renderToString('\\color{red} '+ r + '\\color{'+katexColor+'} \\times \\color{blue} ' +c);
+        document.getElementById("topText").innerHTML += text;
+        document.getElementById("b0").innerHTML = '';
+        document.getElementById("topText").innerHTML +=  writeButton('multiplyMatrices.writeCalculations()', 'Determine the entries', 'b1');
+    }
+
+    
+var result2 = [];
+    var result = [];
+    var peq = '';
+	for (var i = 0; i < a.length; i++) {
+            result[i] = [];
+            result2[i] = [];
+			for (var j = 0; j < b[0].length; j++) {
+					var sum = 0;
+					var t='M_{\\color{red}{'+(i+1)+'},\\color{blue}{'+(j+1)+'}}=';
+					for (var k = 0; k < a[0].length; k++) {
+							sum += a[i][k] * b[k][j];
+							t+='(\\color{red}{'+a[i][k]+'})(\\color{blue}{'+ b[k][j]+'}) + ';
+					}
+					result[i][j] = sum;
+					t = t.substring(0, t.length - 2);
+                    peq+='<br><br>'+katex.renderToString(t+' = '+ sum);
+                    result2[i][j] = 'M_{'+(i+1)+','+(j+1)+'}';
+			}
+    }
+    
+    function writeCalculations () {
+        text = '<hr><p>The resulting matrix will look like can be calculated by multiplying across each <span style="color:red">row</span> down each <span style="color:blue">column<span>';
+        document.getElementById("topText").innerHTML += text;
+        text = katex.renderToString('M = '+arrayToMatrix(result2));
+        document.getElementById("supplement").innerHTML += '<hr>' + text;
+        document.getElementById("supplement").innerHTML += '<p>' + peq + '</p>';
+        document.getElementById("topText").innerHTML += '<p>' + katex.renderToString('\\color{red}'+arrayToMatrix(a)+'\\color{'+katexColor+'} \\times \\color{blue}'+arrayToMatrix(b)) + '</p>';
+        document.getElementById("b1").innerHTML = '';
+        text = '<p>The resulting matrix will be </p>';
+        text += katex.renderToString(' M = ' + arrayToMatrix(result));
+        document.getElementById("topText").innerHTML += text;
+    }
+    
+    multiplyMatrices.checkSize = checkSize;
+    multiplyMatrices.writeCalculations = writeCalculations;
+}
 function simpleReduction () {
     clearBoard();
     document.getElementById(("right-side")).style.display = 'block';
@@ -1304,6 +1381,7 @@ function simpleReduction () {
     document.getElementById("supplement").innerHTML = text; 
     text  = '<div id="b0"><p><button  type="button" class="btn" onclick="simpleReduction.findX()">Solve for X</button></p></div>';
     document.getElementById("topText").innerHTML = text;
+    
     
     function findX () {
         text = '<p>Divide the top row by <span style="color:red"> ' + a + '<span></p>'; 
@@ -1479,17 +1557,7 @@ function eliminateAndReduce () {
         var at = 1;
         var bt = 0;
         var ct = 1;
-        /*
-        var gdd = math.gcd(d,c);
-        d = d/gdd;
-        c1 = c/gdd;
-        var a2d = math.gcd(a2,c);
-        c2 = c/a2d;
-        a2 = a2/a2d;
-        var dt = (Math.abs(d/c1) != 1 ? '\\frac{'+d*Math.abs(b/m1)+'}{'+c1*Math.abs(b/m1)+'}': 1);
-        //dt = (Math.abs(d/c) != 1 ? '\\frac{'+d+'}{'+c+'}': 1);
-        var a2t = (Math.abs(a2/c2) != 1 ? '\\frac{'+a2+'}{'+c2+'}': 1);
-        */
+
         var arr = math.fraction(d, c);
         var dt = writeMathJsFrac(arr);
         arr = math.fraction(a2, c);
@@ -1539,6 +1607,29 @@ function eliminateAndReduce () {
 
 }
 /* utility functions below */
+
+function arrayToMatrix (M,bracket)
+{
+	br=( (typeof bracket != 'undefined') ? bracket : 'bmatrix');
+	var text='\\begin{'+br+'}';
+	for (var  a= 0; a < M.length; a++)
+	{
+		for (var  b= 0; b < M[a].length; b++)
+		{
+			st=(M[a][b]).toString().split('/');
+			if (typeof st[1] != 'undefined') text+='\\frac{'+st[0]+'}{'+st[1]+'} &';
+			else text+=M[a][b]+'&';
+		}
+		text = text.substring(0, text.length - 1);
+		text+='\\\\';
+	}
+	text+='\\end{'+br+'}';
+	return text;
+}
+
+function writeButton (func, text, id) {
+    return text  = '<div id="'+id+'"><p><button  type="button" class="btn" onclick="'+func+'">'+text+'</button></p></div>';
+}
 function writeMatrix (a,b,c,d,a1,a2) {
     var write = '\\begin{bmatrix}';
     write += writeColor(a, 'red') + ' & ' + writeColor(b, 'blue') +' \\\\';
