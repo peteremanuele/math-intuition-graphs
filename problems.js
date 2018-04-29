@@ -1,4 +1,5 @@
 var katexColor = '#212529';
+var defaultColor = '\\color{'+katexColor+'}';
 
 function writeMathJsFrac(frac) {
     if (frac.s == -1) frac.n = - frac.n;
@@ -977,15 +978,33 @@ function graphLog () {
     clearBoard();
     document.getElementById(("right-side")).style.display = 'block';
     document.getElementById("problem-title").innerHTML = "<h1>Graph Log by Inverting an Exponent</h1>";
+    document.getElementById("supplement").innerHTML = "Consider that logs is an inverse function to an exponent";
+    document.getElementById("supplement").innerHTML += "<p>You an calculate the points on an exponent graph, and invert their values to find points on the log graph</p>";
     var brd = JXG.JSXGraph.initBoard('box', { axis: true, boundingbox: [-5,5,5,-5 ], showCopyright: false });
     // var b = Math.floor((Math.random() * 4) + 2);
     //var text = '<p> Graph '+katex.renderToString('f(x) = log_{'+b+'}(x)');
     //document.getElementById("supplement").innerHTML = text;
+    var view = []
+    view[0] = false;
+    view[1] = false;
+    view[2] = false;
     function startOver () {
-        text = '<div id="ba"><p><button  type="button" class="btn" onclick="graphLog.graph(2)">'+katex.renderToString('f(x) = log_{2}(x)')+'</button></p></div>';
-        text += '<div id="bb"><p><button  type="button" class="btn" onclick="graphLog.graph(3)">'+katex.renderToString('f(x) = log_{3}(x)')+'</button></p></div>';
-        text += '<div id="bc"><p><button  type="button" class="btn" onclick="graphLog.graph(4)">'+katex.renderToString('f(x) = log_{4}(x)')+'</button></p></div>';
+        text = '<div id="ba"><p><button id = "l2" type="button" class="btn" onclick="graphLog.graph(2)">'+katex.renderToString('f(x) = log_{2}(x)')+'</button></p></div>';
+        text += '<div id="bb"><p><button  id = "l3" type="button" class="btn" onclick="graphLog.graph(3)">'+katex.renderToString('f(x) = log_{3}(x)')+'</button></p></div>';
+        text += '<div id="bc"><p><button  id = "l4" type="button" class="btn" onclick="graphLog.graph(4)">'+katex.renderToString('f(x) = log_{4}(x)')+'</button></p></div>';
         document.getElementById("topText").innerHTML = text;
+        if (view[0]) {
+            document.getElementById("l2").innerHTML += ' ( already viewed ) ';
+            document.getElementById("l2" ).style.setProperty("text-decoration", "line-through");
+        }
+        if (view[1]) {
+            document.getElementById("l3").innerHTML += ' ( already viewed ) ';
+            document.getElementById("l3" ).style.setProperty("text-decoration", "line-through");
+        }
+        if (view[2]) {
+            document.getElementById("l4").innerHTML += ' ( already viewed ) ';
+            document.getElementById("l4" ).style.setProperty("text-decoration", "line-through");
+        }
     }
     
     startOver();
@@ -993,8 +1012,11 @@ function graphLog () {
     var t = 0;
     function graph (b) {
         startOver();
+        view[b -2 ] = true;
         //if (t > 0) document.getElementById("work").innerHTML = '';
         //t++;
+        document.getElementById("l" + b).innerHTML += ' ( already viewed ) ';
+        document.getElementById("l" + b).style.setProperty("text-decoration", "line-through");
         brd = JXG.JSXGraph.initBoard('box', { axis: true, boundingbox: [-3 , b*b+1, b+1, -b*b -1 ], showCopyright: false });
         brd.create('text', [-1, 2 , katex.renderToString('\\color{blue} f(x) = '+b+'^x')], {size: 8});
         brd.create('functiongraph', [function(x) { return Math.pow(b, x); } ]);
@@ -1605,6 +1627,218 @@ function eliminateAndReduce () {
     eliminateAndReduce.match1 = match1;
     eliminateAndReduce.eliminateY = eliminateY;
 
+}
+
+function limitDomain () {
+    clearBoard();
+    document.getElementById(("right-side")).style.display = 'block';
+    var x = (Math.floor((Math.random() * 6))) * Math.pow(-1, Math.floor((Math.random() * 2)));
+    var y = (Math.floor((Math.random() * 6))) * Math.pow(-1, Math.floor((Math.random() * 2)));
+    var a = (Math.floor((Math.random() * 6)) + 2) * Math.pow(-1, Math.floor((Math.random() * 2)));
+    var b = (Math.floor((Math.random() * 6))+ 2) * Math.pow(-1, Math.floor((Math.random() * 2)));
+    document.getElementById("problem-title").innerHTML = 'Case Defined'; 
+    
+    var arrayL= [-4, -3,-2,-1, 0];
+    var ql = arrayL[Math.floor(Math.random() * arrayL.length)];
+    var arrayR= [0, 1,2,3,4];
+    var qr = arrayR[Math.floor(Math.random() * arrayR.length)];
+    if (ql == qr) qr++;
+    var text;
+    text = '<p>' + writeButton('limitDomain.quad()', "Start a Quadratic Graph", 'q0')+'</p>';
+    text += '<p>' + writeButton('limitDomain.cubed()', "Start a Cubed Graph", 'c0')+'</p>';
+    text += '<p>' + writeButton('limitDomain.abs()', "Start an Absolute Value Graph", 'a0')+'</p>';
+    limitDomain.quad = quad;
+    limitDomain.cubed = cubed;
+    limitDomain.abs = abs;
+    document.getElementById("topText").innerHTML  = text; 
+    var xMax =  Math.max(Math.abs(ql), Math.abs(qr));
+    var yMax = xMax*xMax;
+    var brd = JXG.JSXGraph.initBoard('box', { axis: true, boundingbox: [-xMax-2,yMax+2, xMax + 2 , -yMax -2 ], showCopyright: false });
+    function quad () {
+        document.getElementById("box").innerHTML = '';
+        yMax = xMax*xMax;
+        brd = JXG.JSXGraph.initBoard('box', { axis: true, boundingbox: [-xMax-2,yMax+2, xMax + 2 , -yMax -2 ], showCopyright: false });
+        text = '<hr>Graph ' + katex.renderToString('y = x^2') + '  with the domain of ';
+        text += '<p>'+katex.renderToString('\\color{red}'+ ql );
+        text += katex.renderToString('\\le x \\le \\color{blue} '+qr) + '</p>';
+        document.getElementById("supplement").innerHTML  = text; 
+        
+        text  = 'Draw the graph '+katex.renderToString('y = x^2') +' normally, considering the full domain<p>' +writeButton ('limitDomain.drawQuad()', 'draw', 'b0')+'</p>';
+        document.getElementById("hint").innerHTML  = text; 
+        function drawQuad () {
+            text  = '<hr> '+writeButton ('limitDomain.showLeftPoint()', 'find the value at the <span style="color:red">left most </span> point', 'b1');
+            document.getElementById("hint").innerHTML  += text; 
+            g1 = brd.createElement('functiongraph', [function (t) { return t * t }, -xMax-2, xMax+2], { strokeColor: 'grey', fixed: false  });
+            pl = brd.create('point', [ql,ql*ql], {visible: false, name: '('+ql+', '+ql*ql+')',  fillColor: 'red', strokeColor: 'red'});
+            pr = brd.create('point', [qr,qr*qr], {visible: false, name: '('+qr+', '+qr*qr+')',  fillColor: 'blue', strokeColor: 'blue'});
+            document.getElementById("b0").innerHTML  = ''; 
+        }
+
+        function showLeftPoint () {
+            pl.setAttribute({visible: true});
+            text = '<p>Consider the defined domain of ';
+            text += '<p>'+katex.renderToString('\\color{red}'+ ql );
+            text += katex.renderToString('\\le x \\le \\color{blue} '+qr) + '</p>';
+            text += '<p>The left side of the domain starts at '+ katex.renderToString('\\color{red}x = '+ ql)+'</p>';
+            text += '<p>Find the y value ' + katex.renderToString('y = x^2 = (\\color{red}'+ql+defaultColor+')^2 = '+ql*ql)+'</p>';
+            
+            text  += '<hr>' + writeButton ('limitDomain.showRightPoint()', 'find the value at the <span style="color:blue">right most </span> point', 'b2') ;
+            document.getElementById("hint").innerHTML  += text; 
+            document.getElementById("b1").innerHTML  = ''; 
+        }
+
+        function showRightPoint () {
+            pr.setAttribute({visible: true});
+
+            text = '<p>The right side of the domain starts at '+ katex.renderToString('\\color{blue}x = '+ qr)+'</p>';
+            text += '<p>Find the y value ' + katex.renderToString('y = x^2 = (\\color{blue}'+qr+defaultColor+')^2 = '+qr*qr)+'</p>';
+            
+            //text  += writeButton ('limitDomain.showRightPoint()', 'find the value at the <span style="color:blue">right most </span> point', 'b2');
+            text  += writeButton ('limitDomain.drawFinal()','Draw graph within the domain only', 'b3');
+            document.getElementById("hint").innerHTML  += text; 
+            document.getElementById("b2").innerHTML  = ''; 
+        }
+    
+        function drawFinal () {
+            brd.removeObject(g1);
+            document.getElementById("b3").innerHTML  = ''; 
+            text = '<hr><p>Draw only the portion of the graph between the left and right domain</p>';
+            document.getElementById("hint").innerHTML  += text; 
+            brd.createElement('functiongraph', [function (t) { return t * t }, ql, qr], {  fixed: false  });
+        }
+        limitDomain.showLeftPoint = showLeftPoint;
+        limitDomain.drawQuad = drawQuad;
+        limitDomain.showRightPoint = showRightPoint;
+        limitDomain.drawFinal = drawFinal;
+        
+    }
+
+    function cubed () {
+        document.getElementById("c0").getElementsByTagName('button')[0].style.setProperty("text-decoration", "line-through");
+        document.getElementById("box").innerHTML = '';
+        document.getElementById("hint").innerHTML  = ''; 
+        yMax = xMax*xMax*xMax;
+        brd = JXG.JSXGraph.initBoard('box', { axis: true, boundingbox: [-xMax-2,yMax+2, xMax + 2 , -yMax -2 ], showCopyright: false });
+        text = 'Graph ' + katex.renderToString('y = x^3') + '  with the domain of ';
+        text += '<p>'+katex.renderToString('\\color{red}'+ ql );
+        text += katex.renderToString('\\le x \\le \\color{blue} '+qr) + '</p>';
+        document.getElementById("supplement").innerHTML  = text; 
+        
+        text  = '<hr>Draw the graph '+katex.renderToString('y = x^3') +' normally, considering the full domain<p>' +writeButton ('limitDomain.drawCube()', 'draw', 'b0')+'</p>';
+        document.getElementById("hint").innerHTML  += text; 
+        function drawCube () {
+            text  = '<hr> '+writeButton ('limitDomain.showLeftPointC()', 'find the value at the <span style="color:red">left most </span> point', 'b1');
+            document.getElementById("hint").innerHTML  += text; 
+            g1 = brd.createElement('functiongraph', [function (t) { return t * t * t }, -xMax-2, xMax+2], { strokeColor: 'grey', fixed: false  });
+            pl = brd.create('point', [ql,ql*ql*ql], {visible: false, name: '('+ql+', '+ql*ql*ql+')',  fillColor: 'red', strokeColor: 'red'});
+            pr = brd.create('point', [qr,qr*qr*qr], {visible: false, name: '('+qr+', '+qr*qr*qr+')',  fillColor: 'blue', strokeColor: 'blue'});
+            document.getElementById("b0").innerHTML  = ''; 
+        }
+
+        function showLeftPointC () {
+            pl.setAttribute({visible: true});
+            text = '<p>Consider the defined domain of ';
+            text += '<p>'+katex.renderToString('\\color{red}'+ ql );
+            text += katex.renderToString('\\le x \\le \\color{blue} '+qr) + '</p>';
+            text += '<p>The left side of the domain starts at '+ katex.renderToString('\\color{red}x = '+ ql)+'</p>';
+            text += '<p>Find the y value ' + katex.renderToString('y = x^3 = (\\color{red}'+ql+defaultColor+')^3 = '+ql*ql*ql)+'</p>';
+            
+            text  += '<hr>' + writeButton ('limitDomain.showRightPointC()', 'find the value at the <span style="color:blue">right most </span> point', 'b2') ;
+            document.getElementById("hint").innerHTML  += text; 
+            document.getElementById("b1").innerHTML  = ''; 
+        }
+
+        function showRightPointC () {
+            pr.setAttribute({visible: true});
+
+            text = '<p>The right side of the domain starts at '+ katex.renderToString('\\color{blue}x = '+ qr)+'</p>';
+            text += '<p>Find the y value ' + katex.renderToString('y = x^3 = (\\color{blue}'+qr+defaultColor+')^3 = '+qr*qr*qr)+'</p>';
+            
+            //text  += writeButton ('limitDomain.showRightPoint()', 'find the value at the <span style="color:blue">right most </span> point', 'b2');
+            text  += writeButton ('limitDomain.drawFinalC()','Draw graph within the domain only', 'b3');
+            document.getElementById("hint").innerHTML  += text; 
+            document.getElementById("b2").innerHTML  = ''; 
+        }
+    
+        function drawFinalC () {
+            brd.removeObject(g1);
+            document.getElementById("b3").innerHTML  = ''; 
+            text = '<hr><p>Draw only the portion of the graph between the left and right domain</p>';
+            document.getElementById("hint").innerHTML  += text; 
+            brd.createElement('functiongraph', [function (t) { return t * t * t }, ql, qr], {  fixed: false  });
+        }
+        limitDomain.showLeftPointC = showLeftPointC;
+        limitDomain.drawCube = drawCube;
+        limitDomain.showRightPointC = showRightPointC;
+        limitDomain.drawFinalC = drawFinalC;
+        
+    }
+    
+    function abs () {
+        document.getElementById("box").innerHTML = '';
+        document.getElementById("hint").innerHTML  = ''; 
+        document.getElementById("a0").getElementsByTagName('button')[0].style.setProperty("text-decoration", "line-through");
+        yMax = xMax;
+        brd = JXG.JSXGraph.initBoard('box', { axis: true, boundingbox: [-xMax-2,yMax+2, xMax + 2 , -yMax -2 ], showCopyright: false });
+        text = 'Graph ' + katex.renderToString('y = | x |') + '  with the domain of ';
+        text += '<p>'+katex.renderToString('\\color{red}'+ ql );
+        text += katex.renderToString('\\le x \\le \\color{blue} '+qr) + '</p>';
+        document.getElementById("supplement").innerHTML  = text; 
+        
+        text  = '<hr>Draw the graph '+katex.renderToString('y = | x |') +' normally, considering the full domain<p>' +writeButton ('limitDomain.drawAbs()', 'draw', 'b0')+'</p>';
+        document.getElementById("hint").innerHTML  += text; 
+        function drawAbs () {
+            
+            text  = '<hr> '+writeButton ('limitDomain.showLeftPointA()', 'find the value at the <span style="color:red">left most </span> point', 'b1');
+            document.getElementById("hint").innerHTML  += text; 
+            g1 = brd.createElement('functiongraph', [function (t) { return Math.abs(t) }, -xMax-2, xMax+2], { strokeColor: 'grey', fixed: false  });
+            pl = brd.create('point', [ql, Math.abs(ql)], {visible: false, name: '('+ql+', '+ Math.abs(ql) +')',  fillColor: 'red', strokeColor: 'red'});
+            pr = brd.create('point', [qr,Math.abs(qr)], {visible: false, name: '('+qr+', '+Math.abs(qr)+')',  fillColor: 'blue', strokeColor: 'blue'});
+            document.getElementById("b0").innerHTML  = ''; 
+        }
+
+        function showLeftPointA () {
+            pl.setAttribute({visible: true});
+            text = '<p>Consider the defined domain of ';
+            text += '<p>'+katex.renderToString('\\color{red}'+ ql );
+            text += katex.renderToString('\\le x \\le \\color{blue} '+qr) + '</p>';
+            text += '<p>The left side of the domain starts at '+ katex.renderToString('\\color{red}x = '+ ql)+'</p>';
+            text += '<p>Find the y value ' + katex.renderToString('y = | x | = | \\color{red}'+ql+defaultColor+' |  = '+Math.abs(ql))+'</p>';
+            
+            text  += '<hr>' + writeButton ('limitDomain.showRightPointA()', 'find the value at the <span style="color:blue">right most </span> point', 'b2') ;
+            document.getElementById("hint").innerHTML  += text; 
+            document.getElementById("b1").innerHTML  = ''; 
+        }
+
+        function showRightPointA () {
+            pr.setAttribute({visible: true});
+
+            text = '<p>The right side of the domain starts at '+ katex.renderToString('\\color{blue}x = '+ qr)+'</p>';
+            text += '<p>Find the y value ' + katex.renderToString('y = | x | =  | \\color{blue}'+qr+defaultColor+' | = '+Math.abs(qr))+'</p>';
+            
+            //text  += writeButton ('limitDomain.showRightPoint()', 'find the value at the <span style="color:blue">right most </span> point', 'b2');
+            text  += writeButton ('limitDomain.drawFinalA()','Draw graph within the domain only', 'b3');
+            document.getElementById("hint").innerHTML  += text; 
+            document.getElementById("b2").innerHTML  = ''; 
+        }
+    
+        function drawFinalA () {
+            brd.removeObject(g1);
+            document.getElementById("b3").innerHTML  = ''; 
+            text = '<hr><p>Draw only the portion of the graph between the left and right domain</p>';
+            document.getElementById("hint").innerHTML  += text; 
+            brd.createElement('functiongraph', [function (t) { return Math.abs(t) }, ql, qr], {  fixed: false  });
+        }
+        limitDomain.showLeftPointA = showLeftPointA;
+        limitDomain.drawAbs = drawAbs;
+        limitDomain.showRightPointA = showRightPointA;
+        limitDomain.drawFinalA = drawFinalA;
+        
+    }
+    quad();
+    document.getElementById("q0").getElementsByTagName('button')[0].style.setProperty("text-decoration", "line-through");
+    
+    
 }
 /* utility functions below */
 

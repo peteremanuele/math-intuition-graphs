@@ -86,7 +86,7 @@
                 <div class="dropdown">
                     <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
                         aria-expanded="false">
-                        Understanding Basic Graphs
+                        Understanding  Graphs
                     </button>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                         <a class="dropdown-item" href="#" onclick="callGraphSlopeInt()">Graph by Slope Intercept</a>
@@ -96,7 +96,8 @@
                         <a class="dropdown-item" href="#" onclick="callGraphLog()">Graph Log by Exponent Inverse</a>
                         <a class="dropdown-item" href="#" onclick="callDrawAsymptote()">Draw Asymptote</a>
                         <a class="dropdown-item" href="#" onclick="callGraphOneOverX()">Graph 1/x</a>
-
+                        <a class="dropdown-item" href="#" onclick="callLimitDomain()">Limit the Domain of Graph</a>
+  
                     </div>
                 </div>
             </div>
@@ -111,7 +112,7 @@
                         <a class="dropdown-item" href="#" onclick="simpleReduction()">Solve Simple Reduction</a>
                         <a class="dropdown-item" href="#" onclick="eliminateAndReduce()">Elimination and Matrix Reduction</a>
                         <a class="dropdown-item" href="#" onclick="multiplyMatrices()">Multiply Matrices</a>
-
+                        
                     </div>
                 </div>
             </div>
@@ -131,7 +132,7 @@
         </div>
         <div class="col" id="right-side" style="display: none">
             <div id="lessonDiv" style="display: none">
-                <div id="lessonDivHeader">Guidance</div>
+                <div id="lessonDivHeader">Guidance ( this box is draggable ) </div>
                 <div class="pad5">
                     <p>
                         <span id="topText">...</span>
@@ -212,6 +213,10 @@
 
         function callGraphOneOverX () {
             var brd = graphOneOverX();
+        }
+
+        function callLimitDomain () {
+            var brd = limitDomain();
         }
 
         document.getElementById(("lessonDiv")).style.display = 'block';
